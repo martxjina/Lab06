@@ -29,3 +29,4 @@ class Controller:
 
     # Altre Funzioni Event Handler
     # TODO
+    ft.Text("Strumenti")
