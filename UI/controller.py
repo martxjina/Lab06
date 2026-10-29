@@ -29,4 +29,30 @@ class Controller:
 
     # Altre Funzioni Event Handler
     # TODO
-    ft.Text("Strumenti")
+    def handle_mostra(self, e):
+        strumenti  = self._model.get_strumenti()
+        self._view.lista_strumenti.controls.clear()
+
+        if not strumenti:
+            self._view.lista_strumenti.controls.append(ft.Text("Nessuno strumento trvato nel debosito."))
+        else:
+            for s in strumenti:
+                self._view.lista_strumenti.controls.append(ft.Text(f"[{s.codice}] {s.tipo} - {s.marca} ({s.anno_acquisto}) - {s.valore}"))
+        self._view.update()
+
+    def handle_cerca(self, e):
+        tipo_inserito = self._view.input_tipo_strumento.value
+        if not tipo_inserito:
+            self._view.show_alert("Inserisci un tipo di strumento valido da cercare.")
+            return
+
+        strumenti_filtrati = self._model.cerca_strumenti_per_tipo(tipo_inserito)
+        self._view.lista_strumenti.controls.clear()
+
+        if not strumenti_filtrati:
+            self._view.lista_strumenti_ricerca.controls.append(ft.Text(f"Nessuno strumento trovato per il tipo: {tipo_inserito}"))
+        else:
+            for s in strumenti_filtrati:
+                self._view.lista_strumenti_ricerca.controls.append(ft.Text(f"[{s.codice}] {s.tipo} - {s.marca} - {s.valore}"))
+
+        self._view.update()

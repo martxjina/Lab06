@@ -36,8 +36,13 @@ class DepositoStrumenti:
             :return: una lista con tutti gli strumenti presenti oppure None
         """
         # TODO
+        connessione = get_connection()
+        if connessione is None:
+            print("Errore: impossibile connettersi al database")
+            return []
+
         strumenti = []
-        cursore = get_connection.cursor(dictionary=True)
+        cursore = connessione.cursor(dictionary=True)
         query = "SELECT * FROM strumento"
         cursore.execute(query)
 
@@ -50,6 +55,8 @@ class DepositoStrumenti:
                                   disponibile=riga['disponibile'])
             strumenti.append(strumento)
 
+        cursore.close()
+        connessione.close()
         return strumenti
 
 
@@ -60,8 +67,13 @@ class DepositoStrumenti:
             :return: una lista con tutti gli strumenti del tipo indicato oppure None
         """
         # TODO
+        connessione = get_connection()
+        if connessione is None:
+            print("Errore: impossibile connettersi al database")
+            return []
+
         strumenti_di_un_certo_tipo = []
-        cursore = get_connection.cursor(dictionary=True)
+        cursore = connessione.cursor(dictionary=True)
         query = "SELECT * FROM strumento WHERE tipo = %s"
         cursore.execute(query, (tipo,))
 
@@ -74,6 +86,8 @@ class DepositoStrumenti:
                                   disponibile=riga['disponibile'])
             strumenti_di_un_certo_tipo.append(strumento)
 
+        cursore.close()
+        connessione.close()
         return strumenti_di_un_certo_tipo
 
 
