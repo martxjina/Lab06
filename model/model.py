@@ -37,17 +37,17 @@ class DepositoStrumenti:
         """
         # TODO
         strumenti = []
-        cursore = get_connection.cursor()
-        cursore.execute("select * from strumento")
-        righe = cursore.fetchall()
+        cursore = get_connection.cursor(dictionary=True)
+        query = "SELECT * FROM strumento"
+        cursore.execute(query)
 
-        for riga in righe:
-            strumento = Strumento(codice=riga[0],
-                                  tipo = riga[1],
-                                  marca = riga[2],
-                                  anno_acquisto= int(riga[3]),
-                                  valore=float(riga[4]),
-                                  disponibile=riga[5])
+        for riga in cursore:
+            strumento = Strumento(codice=riga['codice'],
+                                  tipo = riga['tipo'],
+                                  marca = riga['marca'],
+                                  anno_acquisto= int(riga['anno_acquisto']),
+                                  valore=float(riga['valore']),
+                                  disponibile=riga['disponibile'])
             strumenti.append(strumento)
 
         return strumenti
@@ -60,19 +60,18 @@ class DepositoStrumenti:
             :return: una lista con tutti gli strumenti del tipo indicato oppure None
         """
         # TODO
-        cursore = get_connection.cursor()
-        cursore.execute("select * from strumento where tipo = ?", (tipo,))
-        righe = cursore.fetchall()
-
         strumenti_di_un_certo_tipo = []
+        cursore = get_connection.cursor(dictionary=True)
+        query = "SELECT * FROM strumento WHERE tipo = %s"
+        cursore.execute(query, (tipo,))
 
-        for riga in righe:
-            strumento = Strumento(codice=riga[0],
-                                  tipo = riga[1],
-                                  marca = riga[2],
-                                  anno_acquisto= int(riga[3]),
-                                  valore=float(riga[4]),
-                                  disponibile=riga[5])
+        for riga in cursore:
+            strumento = Strumento(codice=riga['codice'],
+                                  tipo=riga['tipo'],
+                                  marca=riga['marca'],
+                                  anno_acquisto=int(riga['anno_acquisto']),
+                                  valore=float(riga['valore']),
+                                  disponibile=riga['disponibile'])
             strumenti_di_un_certo_tipo.append(strumento)
 
         return strumenti_di_un_certo_tipo
